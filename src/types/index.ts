@@ -4,6 +4,7 @@ interface Event {
   startTime: string;
   endTime: string;
   color?: string;
+  background?: string;
   title?: string;
   location?: string;
   section?: string;

@@ -1,20 +1,17 @@
 import React, { FC, useContext } from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-import addOpacity from '../utils/addOpacity';
 import type { Configs, Event } from '../types';
-import colorMixing from '../utils/colorMixing';
 import { ConfigsContext } from './TimeTable';
 
 type EventCardProps = {
   event: Event;
-  backgroundColor: string;
   onPress?: (...args: any[]) => any;
 };
 
-const EventCard: FC<EventCardProps> = ({ event, onPress, backgroundColor }) => {
+const EventCard: FC<EventCardProps> = ({ event, onPress }) => {
   const configs = useContext(ConfigsContext);
-  const styles = getStyles(event, configs, backgroundColor);
+  const styles = getStyles(event, configs);
 
   return (
     <TouchableOpacity
@@ -30,7 +27,7 @@ const EventCard: FC<EventCardProps> = ({ event, onPress, backgroundColor }) => {
   );
 };
 
-const getStyles = (event: Event, configs: Configs, backgroundColor: string) => {
+const getStyles = (event: Event, configs: Configs) => {
   const { cellWidth, cellHeight, startHour } = configs;
   const sTime = event.startTime.split(':').map((x) => parseInt(x, 10));
   const eTime = event.endTime.split(':').map((x) => parseInt(x, 10));
@@ -38,8 +35,8 @@ const getStyles = (event: Event, configs: Configs, backgroundColor: string) => {
     (sTime[0] - startHour) * cellHeight + (sTime[1] / 60.0) * cellHeight;
   const durationHeight =
     cellHeight * (eTime[0] - sTime[0] + (eTime[1] - sTime[1]) / 60.0);
-  const textColor = addOpacity(event.color, 0.8);
-  const bgColor = colorMixing(addOpacity(event.color, 0.15), backgroundColor);
+  const textColor = event.color;
+  const bgColor = event.background;
   const styles = StyleSheet.create({
     courseCard: {
       position: 'absolute',
