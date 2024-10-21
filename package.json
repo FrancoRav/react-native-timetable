@@ -37,7 +37,10 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/francorav/react-native-timetable",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/francorav/react-native-timetable.git"
+  },
   "author": "mikezzb <mikezhoudev@gmail.com> (https://github.com/mikezzb)",
   "license": "MIT",
   "bugs": {
