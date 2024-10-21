@@ -1,6 +1,6 @@
 {
   "name": "@francorav/react-native-timetable",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "description": "React Native TimeTable Component",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -94,7 +94,9 @@
     },
     "npm": {
       "publish": true,
-      "publishArgs": ["--access public"]
+      "publishArgs": [
+        "--access public"
+      ]
     },
     "github": {
       "release": true
