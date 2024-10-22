@@ -12,11 +12,13 @@ type EventCardProps = {
 const EventCard: FC<EventCardProps> = ({ event, onPress }) => {
   const configs = useContext(ConfigsContext);
   const styles = getStyles(event, configs);
+  const position = event.position || "full";
+  const style = position === 'left' ? styles.courseCardLeft : position === 'right' ? styles.courseCardRight : styles.courseCard;
 
   return (
     <TouchableOpacity
       activeOpacity={0.7}
-      style={[styles.courseCard, styles.innerCard]}
+      style={[style, styles.innerCard]}
       onPress={onPress}
     >
       <Text style={styles.courseCardTitle} ellipsizeMode="clip">
@@ -44,6 +46,24 @@ const getStyles = (event: Event, configs: Configs) => {
       zIndex: 2,
       width: cellWidth - 3,
       marginLeft: cellWidth * (event.day - 1),
+      height: durationHeight,
+      marginTop: topMarginValue,
+    },
+    courseCardLeft: {
+      position: 'absolute',
+      borderRadius: 4,
+      zIndex: 2,
+      width: cellWidth/2 - 3,
+      marginLeft: cellWidth * (event.day - 1),
+      height: durationHeight,
+      marginTop: topMarginValue,
+    },
+    courseCardRight: {
+      position: 'absolute',
+      borderRadius: 4,
+      zIndex: 2,
+      width: cellWidth/2 - 3,
+      marginLeft: cellWidth * (event.day - 1) + cellWidth/2,
       height: durationHeight,
       marginTop: topMarginValue,
     },

@@ -8,6 +8,7 @@ interface Event {
   title?: string;
   location?: string;
   section?: string;
+  position?: string; // position of the event in case of overlap. determined automatically
   groupIndex?: number; // index of the group in eventGroups array that this event belongs to
 }
 

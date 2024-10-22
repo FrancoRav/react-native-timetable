@@ -78,6 +78,13 @@ const TimeTable: FC<TimeTableProps> = ({
     weekendEvent = weekendEvent && parsed.configs.numOfDays > 5;
   }
 
+  const { pairwiseOverlaps } = findAllOverlaps(events);
+
+  pairwiseOverlaps.forEach((op) => {
+    op.event1.position = "left";
+    op.event2.position = "right";
+  })
+
   const { cellWidth, cellHeight, timeTicksWidth, numOfHours } = configs;
 
   const styles = getStyles({ timeTicksWidth, theme });
@@ -145,6 +152,83 @@ const TimeTable: FC<TimeTableProps> = ({
     </ConfigsContext.Provider>
   );
 };
+
+class TimeRange {
+  day: Number;
+  start: Number;
+  end: Number;
+
+  constructor(day: Number, start: string, end: string) {
+    this.day = day;
+    this.start = this.ttm(start);
+    this.end = this.ttm(end);
+  }
+
+  ttm(time: string) {
+    const [h, m] = time.split(':').map(x => parseInt(x, 10));
+    return h * 60 + m;
+  }
+
+  overlaps(other: TimeRange) {
+    return this.day === other.day && (this.start < other.end && this.end > other.start);
+  }
+}
+
+const findAllOverlaps = (events: Event[]) => {
+  // Convert events to TimeRange objects
+  const timeRanges = events.map(event => new TimeRange(event.day, event.startTime, event.endTime));
+
+  const overlaps = [];
+
+  // Check each pair of events
+  for (let i = 0; i < timeRanges.length; i++) {
+    for (let j = i + 1; j < timeRanges.length; j++) {
+      if (timeRanges[i].overlaps(timeRanges[j])) {
+        overlaps.push({
+          event1: events[i],
+          event2: events[j]
+        });
+      }
+    }
+  }
+
+  // Group overlapping events into clusters
+  const clusters = [];
+  const processed = new Set();
+
+  for (let i = 0; i < events.length; i++) {
+    if (processed.has(i)) continue;
+
+    const cluster = [events[i]];
+    processed.add(i);
+
+    for (let j = 0; j < events.length; j++) {
+      if (i === j || processed.has(j)) continue;
+
+      // Check if event j overlaps with any event in the current cluster
+      const eventJRange = timeRanges[j];
+      const hasOverlap = cluster.some((clusterEvent, _) => {
+        const clusterEventRange = timeRanges[cluster.indexOf(clusterEvent)];
+        return eventJRange.overlaps(clusterEventRange);
+      });
+
+      if (hasOverlap) {
+        cluster.push(events[j]);
+        processed.add(j);
+      }
+    }
+
+    if (cluster.length > 1) {
+      clusters.push(cluster);
+    }
+  }
+
+  return {
+    pairwiseOverlaps: overlaps,
+    overlapClusters: clusters
+  };
+}
+
 
 const getStyles = ({ timeTicksWidth, theme }) =>
   StyleSheet.create({
