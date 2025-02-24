@@ -7,6 +7,7 @@ import { ConfigsContext } from './TimeTable';
 type EventCardProps = {
   event: Event;
   onPress?: (...args: any[]) => any;
+  onLongPress?: (...args: any[]) => any;
 };
 
 const EventCard: FC<EventCardProps> = ({ event, onPress, onLongPress }) => {
