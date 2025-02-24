@@ -9,7 +9,7 @@ type EventCardProps = {
   onPress?: (...args: any[]) => any;
 };
 
-const EventCard: FC<EventCardProps> = ({ event, onPress }) => {
+const EventCard: FC<EventCardProps> = ({ event, onPress, onLongPress }) => {
   const configs = useContext(ConfigsContext);
   const styles = getStyles(event, configs);
   const position = event.position || "full";
@@ -20,6 +20,7 @@ const EventCard: FC<EventCardProps> = ({ event, onPress }) => {
       activeOpacity={0.7}
       style={[style, styles.innerCard]}
       onPress={onPress}
+      onLongPress={onLongPress}
     >
       <Text style={styles.courseCardTitle} ellipsizeMode="clip">
         {`${event.courseId}${event.section ? ` ${event.section}` : ''}`}

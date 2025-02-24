@@ -15,6 +15,7 @@ type TimeTableProps = {
   events?: Event[];
   eventGroups?: EventGroup[];
   eventOnPress?: (...args: any[]) => any;
+  eventOnLongPress?: (...args: any[]) => any;
   eventColors?: string[];
   configs?: Partial<Configs>;
   headerStyle?: ViewStyle;
@@ -32,6 +33,7 @@ const TimeTable: FC<TimeTableProps> = ({
   events,
   eventGroups,
   eventOnPress,
+  eventOnLongPress,
   headerStyle,
   disableHeader,
   disableTicker,
@@ -143,6 +145,7 @@ const TimeTable: FC<TimeTableProps> = ({
                     color: event.color || eventColors[i % eventColors.length],
                   }}
                   onPress={eventOnPress && (() => eventOnPress(event))}
+                  onLongPress={eventOnLongPress && (() => eventOnLongPress(event))}
                 />
               ))}
             </ScrollView>
